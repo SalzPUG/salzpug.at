@@ -110,6 +110,18 @@ def format_date(date, format_string):
 # View functions
 # ==============
 
+@app.route('/')
+def index():
+    u"""Render a page with all articles in reversed chronological order.
+
+    An “article” is supposed to be a page from the FlatPages collection that
+    has the “published” attribute in its metadata.
+    """
+    articles = reversed(sorted((p for p in pages if 'published' in p.meta),
+                               key=lambda p: p.meta['published']))
+    return render_template('index.xhtml', articles=articles)
+
+
 @app.route('/<path:path>/')
 def show_page(path):
     u"""Render a static page from the FlatPages collection.

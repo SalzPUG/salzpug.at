@@ -1,0 +1,13 @@
+{% macro render_article(article) %}
+<article>
+    <header>
+        <h2>{{ article.meta.title }}</h2>
+        {% if article.meta.published %}
+        <time datetime='{{ article.meta.published|date('%Y-%m-%d') }}'>
+            {{- article.meta.published|date('%B %e, %Y') -}}
+        </time>
+        {% endif %}
+    </header>
+    {{ article.html|safe }}
+</article>
+{% endmacro %}
