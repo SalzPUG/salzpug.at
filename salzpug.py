@@ -29,8 +29,10 @@ Run ``pip install -r requirements.txt`` to install all dependencies.
 """
 
 import datetime
+import math
 
-from flask import Flask, render_template, render_template_string
+from flask import (Flask, render_template, render_template_string, request,
+                   url_for, abort)
 from flask_flatpages import FlatPages, pygmented_markdown, pygments_style_defs
 from markupsafe import Markup
 
@@ -60,6 +62,9 @@ class Config(object):
     FLATPAGES_EXTENSION = '.md'
     FLATPAGES_HTML_RENDERER = prerender_jinja
     PYGMENTS_STYLE = 'tango'
+
+    # Custom configuration
+    ARTICLES_PER_PAGE = 3
 
 
 # Application setup
@@ -94,6 +99,22 @@ def image(src, alt, title='', class_name='', id=''):
                            class_name=class_name, id=id)
 
 
+@app.template_global()
+def pagination_url(page):
+    u"""Return the current view’s URL, using a different ``page`` parameter.
+
+    All parameters and arguments of the current URL other than ``page`` will
+    remain the same. This is useful for paginated views that split their
+    contents over several pages.
+
+    :param page: the new value for the ``page`` parameter of the current
+                 view’s URL.
+    """
+    args = request.view_args.copy()
+    args['page'] = page
+    return url_for(request.endpoint, **args)
+
+
 @app.template_filter('date')
 def format_date(date, format_string):
     u"""Convert a :py:class:`date` or :py:class:`datetime` to a string.
@@ -112,16 +133,22 @@ def format_date(date, format_string):
 # View functions
 # ==============
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'page': 1})
+@app.route('/page/<int:page>/')
+def index(page):
     u"""Render a page with all articles in reversed chronological order.
 
     An “article” is supposed to be a page from the FlatPages collection that
-    has the “published” attribute in its metadata.
+    has the “published” attribute in its metadata.  Configure
+    ``ARTICLES_PER_PAGE`` to control how many articles shall be displayed on
+    one page.
     """
     articles = reversed(sorted((p for p in pages if 'published' in p.meta),
                                key=lambda p: p.meta['published']))
-    return render_template('index.xhtml', articles=articles)
+    pagination = Pagination(articles, page, app.config['ARTICLES_PER_PAGE'])
+    if not pagination.items and page != 1:
+        abort(404)
+    return render_template('index.xhtml', pagination=pagination)
 
 
 @app.route('/<path:path>/')
@@ -150,6 +177,101 @@ def pygments_css():
 def not_found(error):
     u"""Render the “Error 404: Not Found” page."""
     return show_page('error-404'), 404
+
+
+# Pagination
+# ==========
+
+class Pagination(object):
+    u"""A simple class to paginate an iterable.
+
+    This class is inspired by Armin Ronacher’s snippet at
+    http://flask.pocoo.org/snippets/44/.
+    """
+
+    def __init__(self, iterable, page, per_page):
+        u"""Create a new ``Pagination`` object.
+
+        :param iterable: the iterable to paginate.
+        :param page: the current page number.
+        :param per_page: the number of items of the iterable to put on each
+                         page.
+        """
+        self.all_items = list(iterable)
+        self.page = page
+        self.per_page = per_page
+
+    @property
+    def items(self):
+        u"""All items of the iterable that are on the current page.
+
+        >>> pagination = Pagination('ABCDEFGHIJKLMNOPQRS', page=5, per_page=2)
+        >>> pagination.items
+        ['I', 'J']
+        """
+        lower_index = (self.page-1) * self.per_page
+        upper_index = self.page * self.per_page
+        return self.all_items[lower_index:upper_index]
+
+    @property
+    def pages(self):
+        u"""The total number of pages.
+
+        >>> pagination = Pagination('ABCDEFGHIJKLMNOPQRS', page=5, per_page=2)
+        >>> pagination.pages
+        10
+        """
+        return int(math.ceil(len(self.all_items) / float(self.per_page)))
+
+    @property
+    def has_prev(self):
+        u"""``True`` if the current page is not the first page.
+
+        >>> pagination = Pagination('ABCDEFGHIJKLMNOPQRS', page=5, per_page=2)
+        >>> pagination.has_prev
+        True
+        """
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        u"""``True`` if the current page is not the last page.
+
+        >>> pagination = Pagination('ABCDEFGHIJKLMNOPQRS', page=5, per_page=2)
+        >>> pagination.has_next
+        True
+        """
+        return self.page < self.pages
+
+    def iter_pages(self, left_edge=2, left_current=2,
+                   right_current=5, right_edge=2):
+        u"""Return an iterator yielding page numbers to build a pagination.
+
+        This function returns numbers similar to the builtin ``range()``,
+        starting at ``1``, but omitting superfluous page numbers inbetween.
+        “Holes” within the sequence are denoted by a single ``None`` value.
+
+        >>> pagination = Pagination('ABCDEFGHIJKLMNOPQRS', page=5, per_page=2)
+        >>> list(pagination.iter_pages(left_current=1, right_current=1))
+        [1, 2, None, 4, 5, 6, None, 9, 10]
+
+        :param left_edge: the number of page numbers to yield at the beginning
+                          of the pagination.
+        :param left_current: the number of page numbers to yield before the
+                             current page.
+        :param right_current: the number of page numbers to yield after the
+                              current page.
+        :param right_edge: the number of page numbers to yield at the end of
+                           the pagination.
+        """
+        last = 0
+        for i in range(1, self.pages+1):
+            if (i <= left_edge or i > self.pages-right_edge or
+                    self.page-left_current-1 < i <= self.page+right_current):
+                if last + 1 != i:
+                    yield None
+                yield i
+                last = i
 
 
 # Development server

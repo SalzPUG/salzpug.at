@@ -169,6 +169,12 @@ article h2 + time {
     margin-top: -1rem;
 }
 
+/* Pagination */
+ul[aria-label='Pagination'] {
+    margin: 2rem 0;
+    font-weight: bold;
+}
+
 /* Footer */
 footer[role='contentinfo'] {
     margin-top: 3rem;

@@ -1,12 +1,38 @@
 {% extends 'layout.xhtml' %}
 {% import 'macros.xhtml' as macros %}
 
+{% macro pagination_link(page, label, aria_label) -%}
+<a href='{{ pagination_url(page) }}' aria-label='{{ aria_label }}'>{{ label }}</a>
+{%- endmacro %}
+
 {% block banner -%}
 Home
 {%- endblock %}
 
 {% block content %}
-{% for article in articles %}
+{% for article in pagination.items %}
 {{ macros.render_article(article) }}
 {% endfor %}
+
+{% if pagination.pages > 1 %}
+<ul role='Navigation' aria-label='Pagination' class='python-list' data-list-title='go_to_page'>
+    {% if pagination.has_prev %}
+    <li>{{ pagination_link(pagination.page-1, 'Previous', 'Previous page') }}</li>
+    {% endif %}
+    {% for page in pagination.iter_pages() %}
+        {% if page %}
+            {% if page == pagination.page %}
+    <li class='current numeric' aria-label='Page {{ page }}, current page'>{{ page }}</li>
+            {% else %}
+    <li class='numeric'>{{ pagination_link(page, page, 'Page '~page) }}</li>
+            {% endif %}
+        {% else %}
+    <li>…</li>
+        {% endif %}
+    {% endfor %}
+    {% if pagination.has_next %}
+    <li>{{ pagination_link(pagination.page+1, 'Next', 'Next page') }}</li>
+    {% endif %}
+</ul>
+{% endif %}
 {% endblock %}
