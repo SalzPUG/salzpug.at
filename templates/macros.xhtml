@@ -3,11 +3,16 @@
     <header>
         <h2><a href='{{ url_for('show_page', path=article.path) }}'>{{ article.meta.title }}</a></h2>
         {% if article.meta.published %}
-        <time datetime='{{ article.meta.published|date('%Y-%m-%d') }}'>
-            {{- article.meta.published|date('%B %e, %Y') -}}
-        </time>
+        {{ render_pubdate(article.meta.published) }}
         {% endif %}
     </header>
     {{ article.html|safe }}
 </article>
 {% endmacro %}
+
+
+{% macro render_pubdate(pubdate) -%}
+<time datetime='{{ pubdate|date('%Y-%m-%d') }}'>
+    {{- pubdate|date('%B %e, %Y') -}}
+</time>
+{%- endmacro %}

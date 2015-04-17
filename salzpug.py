@@ -138,13 +138,10 @@ def format_date(date, format_string):
 def index(page):
     u"""Render a page with all articles in reversed chronological order.
 
-    An “article” is supposed to be a page from the FlatPages collection that
-    has the “published” attribute in its metadata.  Configure
-    ``ARTICLES_PER_PAGE`` to control how many articles shall be displayed on
-    one page.
+    Configure ``ARTICLES_PER_PAGE`` to control how many articles shall be
+    displayed on one page.
     """
-    articles = reversed(sorted((p for p in pages if 'published' in p.meta),
-                               key=lambda p: p.meta['published']))
+    articles = blog_articles()
     pagination = Pagination(articles, page, app.config['ARTICLES_PER_PAGE'])
     if not pagination.items and page != 1:
         abort(404)
@@ -163,6 +160,12 @@ def show_page(path):
     return render_template('page.xhtml', page=pages.get_or_404(path))
 
 
+@app.route('/archives/')
+def archives():
+    u"""Render a page with the titles of all articles, grouped by year."""
+    return render_template('archives.xhtml', articles=blog_articles())
+
+
 @app.route('/pygments.css')
 def pygments_css():
     u"""Return the stylesheet for the selected Pygments style."""
@@ -177,6 +180,19 @@ def pygments_css():
 def not_found(error):
     u"""Render the “Error 404: Not Found” page."""
     return show_page('error-404'), 404
+
+
+# Auxiliary functions
+# ===================
+
+def blog_articles():
+    u"""Return all blog articles in reversed chronological order.
+
+    An “article” is supposed to be a page from the FlatPages collection that
+    has the “published” attribute in its metadata.
+    """
+    return reversed(sorted((p for p in pages if 'published' in p.meta),
+                           key=lambda p: p.meta['published']))
 
 
 # Pagination
