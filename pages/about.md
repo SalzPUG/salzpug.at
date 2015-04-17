@@ -1,5 +1,8 @@
 title: About
 
+{{ image('rangerer.jpg', 'rangerer', 'rangerer') }}
+{{ image('igor.jpg', 'igor', 'igor') }}
+
 We are a crop of people who have a soft spot for the [Python][1] programming
 language, centered around the city of Salzburg.
 

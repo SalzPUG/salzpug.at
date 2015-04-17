@@ -66,6 +66,30 @@ app.config.from_object(Config)
 pages = FlatPages(app)
 
 
+# Template globals
+# ================
+
+@app.template_global()
+def image(src, alt, title='', class_name='', id=''):
+    u"""Generate a HTML5 ``figure`` element with an image.
+
+    :param src: the image’s URL.  If it does not start with ``http://`` or
+                ``https://``, it is assumed to be a path within the
+                ``static/images`` directory.
+    :param alt: the text alternative for the image, used as ``alt`` attribute
+                on the ``img`` tag.
+    :param title: the image’s caption.  If given, a ``figcaption`` element
+                  will be added to the ``figure``.
+    :param class_name: the CSS class name(s) to be added to the ``figure``
+                       element, as a single string.  If empty, no class names
+                       will be set.
+    :param id: the value of the ``id`` attribute for the ``figure`` element.
+               If empty, no ID will be set.
+    """
+    return render_template('figure.xhtml', src=src, alt=alt, title=title,
+                           class_name=class_name, id=id)
+
+
 # View functions
 # ==============
 
