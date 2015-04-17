@@ -3,6 +3,10 @@
     <head>
         <meta charset='utf-8' />
         <title>{% block title %}SalzPUG{% endblock %}</title>
+        <script src='//html5shim.googlecode.com/svn/trunk/html5.js'></script>
+        <link rel='stylesheet' href='{{ url_for('static', filename='css/normalize.css') }}' />
+        <link rel='stylesheet' href='{{ url_for('pygments_css') }}' />
+        <link rel='stylesheet' href='{{ url_for('static', filename='css/base.css') }}' />
     </head>
     <body>
         <header role='banner'>

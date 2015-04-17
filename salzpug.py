@@ -23,6 +23,7 @@ This module dependes on the following packages:
 * Flask
 * Flask-FlatPages
 * Flask-Script (if run as a standalone script)
+* Pygments
 
 Run ``pip install -r requirements.txt`` to install all dependencies.
 """
@@ -30,7 +31,7 @@ Run ``pip install -r requirements.txt`` to install all dependencies.
 import datetime
 
 from flask import Flask, render_template, render_template_string
-from flask_flatpages import FlatPages, pygmented_markdown
+from flask_flatpages import FlatPages, pygmented_markdown, pygments_style_defs
 from markupsafe import Markup
 
 
@@ -58,6 +59,7 @@ class Config(object):
     FLATPAGES_AUTO_RELOAD = False
     FLATPAGES_EXTENSION = '.md'
     FLATPAGES_HTML_RENDERER = prerender_jinja
+    PYGMENTS_STYLE = 'tango'
 
 
 # Application setup
@@ -132,6 +134,13 @@ def show_page(path):
              given path.
     """
     return render_template('page.xhtml', page=pages.get_or_404(path))
+
+
+@app.route('/pygments.css')
+def pygments_css():
+    u"""Return the stylesheet for the selected Pygments style."""
+    style = app.config['PYGMENTS_STYLE']
+    return pygments_style_defs(style), 200, {'Content-Type': 'text/css'}
 
 
 # Error handling
