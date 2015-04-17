@@ -113,6 +113,10 @@ h1 a {
 h1 a:hover {
     background-color: white;
 }
+h1 b {
+    color: #ffd43b;
+    text-shadow: 1px 1px 1px #1d405d;
+}
 
 /* Articles */
 article {

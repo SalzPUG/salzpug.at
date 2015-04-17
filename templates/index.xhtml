@@ -1,6 +1,10 @@
 {% extends 'layout.xhtml' %}
 {% import 'macros.xhtml' as macros %}
 
+{% block banner -%}
+Home
+{%- endblock %}
+
 {% block content %}
 {% for article in articles %}
 {{ macros.render_article(article) }}

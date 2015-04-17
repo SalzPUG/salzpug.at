@@ -1,4 +1,5 @@
 title: About
+banner: About
 
 {{ image('rangerer.jpg', 'rangerer', 'rangerer', id='about-rangerer') }}
 {{ image('igor.jpg', 'igor', 'igor', id='about-igor') }}

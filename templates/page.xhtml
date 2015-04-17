@@ -5,6 +5,14 @@
 {{ page.meta.title }} – {{ super() }}
 {%- endblock %}
 
+{% block banner %}
+    {%- if page.meta.banner -%}
+        {{ page.meta.banner }}
+    {%- else -%}
+        Blog
+    {%- endif -%}
+{% endblock %}
+
 {% block content %}
 {{ macros.render_article(page) }}
 {% endblock %}
