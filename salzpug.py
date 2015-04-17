@@ -27,7 +27,7 @@ This module dependes on the following packages:
 Run ``pip install -r requirements.txt`` to install all dependencies.
 """
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_flatpages import FlatPages
 
 
@@ -52,6 +52,21 @@ class Config(object):
 application = app = Flask(__name__)
 app.config.from_object(Config)
 pages = FlatPages(app)
+
+
+# View functions
+# ==============
+
+@app.route('/<path:path>/')
+def show_page(path):
+    u"""Render a static page from the FlatPages collection.
+
+    :param path: the path to the requested page, relative to
+                 ``FLATPAGES_ROOT``.
+    :raises: :class:`~werkzeug.exceptions.NotFound` if there is no page at the
+             given path.
+    """
+    return render_template('page.xhtml', page=pages.get_or_404(path))
 
 
 # Development server
