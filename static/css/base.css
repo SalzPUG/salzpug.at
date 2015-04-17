@@ -89,6 +89,40 @@ time {
 .codehilite pre {
     font-size: 95%;
 }
+.python-list {
+    padding-left: 0;
+}
+.python-list::before {
+    margin-right: -1ex;
+    content: attr(data-list-title) ' = [';
+}
+.python-list::after {
+    margin-left: -1ex;
+    content: ']';
+}
+.python-list li {
+    display: inline-block;
+}
+.python-list li::before {
+    position: static;
+    width: auto;
+    content: '';
+}
+.python-list li:not(.numeric)::before {
+    content: "'";
+}
+.python-list li::after {
+    content: "',";
+}
+.python-list li:last-child::after {
+    content: "'";
+}
+.python-list li.numeric::after {
+    content: ',';
+}
+.python-list li.numeric:last-child::after {
+    content: '';
+}
 
 /* Banner */
 header[role='banner'] {
@@ -116,6 +150,11 @@ h1 a:hover {
 h1 b {
     color: #ffd43b;
     text-shadow: 1px 1px 1px #1d405d;
+}
+
+/* Main navigation */
+nav {
+    font-weight: bold;
 }
 
 /* Articles */

@@ -11,6 +11,12 @@
     <body>
         <header role='banner'>
             <h1><a href='/'>SalzPUG</a> <b>{% block banner %}{% endblock %}</b></h1>
+            <nav>
+                <ul class='python-list' data-list-title='navigation'>
+                    <li><a href='{{ url_for('index') }}'>Home</a></li>
+                    <li><a href='{{ url_for('show_page', path='about') }}'>About</a></li>
+                </ul>
+            </nav>
         </header>
         <main>
 {% block content %}{% endblock %}
