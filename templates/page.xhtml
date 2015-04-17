@@ -10,7 +10,14 @@
         </header>
         <main>
             <article>
-                <h2>{{ page.meta.title }}</h2>
+                <header>
+                    <h2>{{ page.meta.title }}</h2>
+                    {% if page.meta.published %}
+                    <time datetime='{{ page.meta.published|date('%Y-%m-%d') }}'>
+                        {{- page.meta.published|date('%B %e, %Y') -}}
+                    </time>
+                    {% endif %}
+                </header>
                 {{ page.html|safe }}
             </article>
         </main>
