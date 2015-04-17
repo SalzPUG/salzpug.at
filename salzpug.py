@@ -21,18 +21,37 @@ Options:
 This module dependes on the following packages:
 
 * Flask
+* Flask-FlatPages
 * Flask-Script (if run as a standalone script)
 
 Run ``pip install -r requirements.txt`` to install all dependencies.
 """
 
 from flask import Flask
+from flask_flatpages import FlatPages
+
+
+# Configuration
+# =============
+
+class Config(object):
+    u"""The default configuration for the Flask application.
+
+    Only uppercase variables in this class will be stored in the configuration
+    object.
+    """
+
+    # Flask-FlatPages configuration
+    FLATPAGES_AUTO_RELOAD = False
+    FLATPAGES_EXTENSION = '.md'
 
 
 # Application setup
 # =================
 
 application = app = Flask(__name__)
+app.config.from_object(Config)
+pages = FlatPages(app)
 
 
 # Development server
@@ -40,5 +59,6 @@ application = app = Flask(__name__)
 
 if __name__ == '__main__':
     from flask.ext.script import Manager
+    app.config.update({'FLATPAGES_AUTO_RELOAD': True})
     manager = Manager(app)
     manager.run()
