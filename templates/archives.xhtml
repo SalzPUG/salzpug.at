@@ -13,14 +13,7 @@ Archives
 <article>
     {% for group in articles|groupby('published.year')|reverse %}
     <h2>{{ group.grouper }}</h2>
-    <ol>
-        {% for article in group.list %}
-        <li>
-            <a href='{{ url_for('show_page', path=article.path) }}'>{{ article.meta.title }}</a>
-            {{ macros.render_pubdate(article.meta.published) }}
-        </li>
-        {% endfor %}
-    </ol>
+    {{ macros.render_article_list(group.list) }}
     {% endfor %}
 </article>
 {% endblock %}

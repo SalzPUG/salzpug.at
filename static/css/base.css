@@ -42,6 +42,9 @@ a {
 a:hover {
     background-color: #ffe467;
 }
+h2 b {
+    color: #346e9e;
+}
 ol, ul {
     padding-left: 4ex;
     list-style: none;
@@ -167,6 +170,14 @@ article + article {
 article h2 + time {
     display: block;
     margin-top: -1rem;
+}
+article footer span {
+    position: absolute;
+    left: -99em;
+}
+article footer ul {
+    font-size: 90%;
+    font-weight: bold;
 }
 
 /* Pagination */

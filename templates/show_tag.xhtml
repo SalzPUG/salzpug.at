@@ -1,0 +1,17 @@
+{% extends 'layout.xhtml' %}
+{% import 'macros.xhtml' as macros %}
+
+{% block title -%}
+Articles tagged “{{ tag }}” – {{ super() }}
+{%- endblock %}
+
+{% block banner -%}
+{{ tag }}
+{%- endblock %}
+
+{% block content %}
+<article>
+    <h2>Articles tagged <b>{{ tag }}</b></h2>
+    {{ macros.render_article_list(articles) }}
+</article>
+{% endblock %}

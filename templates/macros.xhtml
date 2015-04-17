@@ -1,3 +1,15 @@
+{% macro render_article_list(articles) %}
+<ol>
+    {% for article in articles %}
+    <li>
+        <a href='{{ url_for('show_page', path=article.path) }}'>{{ article.meta.title }}</a>
+        {{ render_pubdate(article.meta.published) }}
+    </li>
+    {% endfor %}
+</ol>
+{% endmacro %}
+
+
 {% macro render_article(article) %}
 <article>
     <header>
@@ -7,6 +19,16 @@
         {% endif %}
     </header>
     {{ article.html|safe }}
+    {% if article.meta.tags %}
+    <footer>
+        <span>Tags:</span>
+        <ul class='python-list' data-list-title='tags'>
+            {% for tag in article.meta.tags %}
+            <li><a href='{{ url_for('show_tag', tag=tag) }}'>{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+    </footer>
+    {% endif %}
 </article>
 {% endmacro %}
 

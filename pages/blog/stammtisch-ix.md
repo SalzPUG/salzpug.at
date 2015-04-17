@@ -1,5 +1,6 @@
 title: Stammtisch IX
 published: 2015-04-03
+tags: [stammtisch]
 
 In our ninth “Stammtisch” (regulars’ table), we will examine what the Easter
 Bunny has left for us.

@@ -28,6 +28,7 @@ This module dependes on the following packages:
 Run ``pip install -r requirements.txt`` to install all dependencies.
 """
 
+import collections
 import datetime
 import math
 
@@ -158,6 +159,21 @@ def show_page(path):
              given path.
     """
     return render_template('page.xhtml', page=pages.get_or_404(path))
+
+
+@app.route('/tags/')
+def tag_list():
+    u"""Render a page listing all available article tags."""
+    tags = collections.Counter([tag for article in blog_articles()
+                                for tag in article.meta.get('tags', [])])
+    return render_template('tag_list.xhtml', tags=tags)
+
+
+@app.route('/tag/<tag>/')
+def show_tag(tag):
+    u"""Render a page with the titles of all articles with a given tag."""
+    articles = (a for a in blog_articles() if tag in a.meta.get('tags', []))
+    return render_template('show_tag.xhtml', tag=tag, articles=articles)
 
 
 @app.route('/archives/')
