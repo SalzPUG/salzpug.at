@@ -27,8 +27,9 @@ This module dependes on the following packages:
 Run ``pip install -r requirements.txt`` to install all dependencies.
 """
 
-from flask import Flask, render_template
-from flask_flatpages import FlatPages
+from flask import Flask, render_template, render_template_string
+from flask_flatpages import FlatPages, pygmented_markdown
+from markupsafe import Markup
 
 
 # Configuration
@@ -41,9 +42,20 @@ class Config(object):
     object.
     """
 
+    @staticmethod
+    def prerender_jinja(text):
+        u"""Render Markdown with Jinja directives to HTML.
+
+        Use this function to configure ``FLATPAGES_HTML_RENDERER``, to support
+        evaluating Jinja directives embedded within the Markdown document.
+        """
+        prerendered_body = render_template_string(Markup(text))
+        return pygmented_markdown(prerendered_body)
+
     # Flask-FlatPages configuration
     FLATPAGES_AUTO_RELOAD = False
     FLATPAGES_EXTENSION = '.md'
+    FLATPAGES_HTML_RENDERER = prerender_jinja
 
 
 # Application setup
