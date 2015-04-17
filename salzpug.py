@@ -27,6 +27,8 @@ This module dependes on the following packages:
 Run ``pip install -r requirements.txt`` to install all dependencies.
 """
 
+import datetime
+
 from flask import Flask, render_template, render_template_string
 from flask_flatpages import FlatPages, pygmented_markdown
 from markupsafe import Markup
@@ -66,8 +68,8 @@ app.config.from_object(Config)
 pages = FlatPages(app)
 
 
-# Template globals
-# ================
+# Template globals & filters
+# ==========================
 
 @app.template_global()
 def image(src, alt, title='', class_name='', id=''):
@@ -88,6 +90,21 @@ def image(src, alt, title='', class_name='', id=''):
     """
     return render_template('figure.xhtml', src=src, alt=alt, title=title,
                            class_name=class_name, id=id)
+
+
+@app.template_filter('date')
+def format_date(date, format_string):
+    u"""Convert a :py:class:`date` or :py:class:`datetime` to a string.
+
+    :param date: the date to be formatted.  If ``None``, it will use the
+                 current UTC date and time.
+    :param format_string: a string with format codes to control the string
+                          representation of the date.  Consult the
+                          ``strftime()`` documentation for details.
+    """
+    if date is None:
+        date = datetime.datetime.utcnow()
+    return date.strftime(format_string)
 
 
 # View functions
