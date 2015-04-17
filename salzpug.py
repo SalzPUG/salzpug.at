@@ -122,6 +122,15 @@ def show_page(path):
     return render_template('page.xhtml', page=pages.get_or_404(path))
 
 
+# Error handling
+# ==============
+
+@app.errorhandler(404)
+def not_found(error):
+    u"""Render the “Error 404: Not Found” page."""
+    return show_page('error-404'), 404
+
+
 # Development server
 # ==================
 
