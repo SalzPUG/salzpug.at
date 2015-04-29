@@ -15,10 +15,12 @@ would like to join or visit.
 
 We invite you to join our [group at Meetup.com][4] to stay informed about
 upcoming meetings.  Head over to our [GitHub account][5] if you want to admire
-the outcomes of our programming exercises.
+the outcomes of our programming exercises.  You will also find the
+[source code of this website][6] there.
 
 [1]: http://www.python.org
 [2]: http://codingdojo.org
 [3]: http://www.techno-z.at/ihr-top-standort-techno-z/seminarraeume-salzburg/
 [4]: http://www.meetup.com/SalzPUG/
 [5]: https://github.com/SalzPUG
+[5]: https://github.com/SalzPUG/salzpug.at
