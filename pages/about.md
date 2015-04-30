@@ -23,4 +23,4 @@ the outcomes of our programming exercises.  You will also find the
 [3]: http://www.techno-z.at/ihr-top-standort-techno-z/seminarraeume-salzburg/
 [4]: http://www.meetup.com/SalzPUG/
 [5]: https://github.com/SalzPUG
-[5]: https://github.com/SalzPUG/salzpug.at
+[6]: https://github.com/SalzPUG/salzpug.at
