@@ -38,3 +38,13 @@ the [Techno-Z Veranstaltungszentrum][6].*
 [4]: http://pythonhosted.org/Flask-FlatPages/
 [5]: http://www.meetup.com/SalzPUG/events/221497059/
 [6]: http://www.techno-z.at/ihr-top-standort-techno-z/seminarraeume-salzburg/
+
+
+### Roundup
+
+Due to last-minute cancellations, we only welcomed two guests this time, but
+this was in no way detrimental to the atmosphere.  In the end, the live coding
+presentation resulted in a brand-new SalzPUG website; the source code is
+[freely available on GitHub][7].
+
+[7]: https://github.com/SalzPUG/salzpug.at
